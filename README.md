@@ -1,4 +1,5 @@
-##基于深度神经网络的线虫计数v2.0
+##基于深度神经网络的线虫计数
+
 #运行环境：
 Windows 10 x64/x86
 Windows 7   x64/x86
@@ -40,10 +41,9 @@ TF_Elegans_count/
 8.检查无误后点击显示判断为没有线虫或者边缘区域弹出识别为0条虫的区域
 9.手动对计数加减后在左下角得到结果
 10.如果需要继续判断点击列表中其他图片名继续判断
-
 #高阶：
 如果您想训练新的模型
-https://github.com/WeberKang/Elegans_count中train.py、utils_paths.py、predict.py自行训练
+https://github.com/WeberKang/Elegans_count 中train.py、utils_paths.py、predict.py自行训练
 
 #演示视频：
 演示视频v2.0.mp4
@@ -53,6 +53,7 @@ v0.1 -基本内容开发实现判断
 v0.2 -使用tkinter开发GUI
 v1.0 -换用Qt开发GUI
 v2.0 -优化部分体验
+
 #维护者：
 WeberKang（康伟博）https://github.com/WeberKang Email：kangweber@mail.ynu.edu.cn
 
@@ -64,8 +65,3 @@ Shiny_X（夏家乐）https://github.com/Skies0
 
 #使用许可：
 GNU General Public License v2.0
-
-
-
-
-
