@@ -51,7 +51,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
     horizontal_flip=True, fill_mode="nearest")
 
 # 建立卷积神经网络
-model = ResNet50(weights=None, classes=4)
+model = ResNet50(weights=None, classes=4) #可以尝试其他网络
 
 # 设置初始化超参数
 INIT_LR = 0.01
@@ -70,7 +70,7 @@ H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
     epochs=EPOCHS)
 
 # H = model.fit(trainX, trainY, validation_data=(testX, testY),
-#     epochs=EPOCHS, batch_size=BS)
+#     epochs=EPOCHS, batch_size=BS) 建议使用这个，fit_generator将停用
 
 
 
