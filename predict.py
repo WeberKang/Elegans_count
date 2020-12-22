@@ -16,7 +16,7 @@ for (rootDir, dirNames, filenames) in os.walk('./cs_image/'):
 
         image = cv2.imread(imagePath)
         output = image.copy()
-        image = cv2.resize(image, (224, 224))
+        image = cv2.resize(image, (224, 224))#根据所选网络对其修改
 
         # scale图像数据
         image = image.astype("float32") / 255.0
