@@ -19,7 +19,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1280, 720)
+        MainWindow.resize(1280, 780)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
         self.layoutWidget2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget2.setGeometry(QtCore.QRect(250, 0, 1011, 661))
+        self.layoutWidget2.setGeometry(QtCore.QRect(250, 0, 1011, 721))
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -72,6 +72,9 @@ class Ui_MainWindow(object):
         self.pushButton_5 = QtWidgets.QPushButton(self.layoutWidget2)
         self.pushButton_5.setObjectName("pushButton_5")
         self.horizontalLayout.addWidget(self.pushButton_5)
+        self.pushButton_8 = QtWidgets.QPushButton(self.layoutWidget2)
+        self.pushButton_8.setObjectName("pushButton_8")
+        self.horizontalLayout.addWidget(self.pushButton_8)
         self.spinBox = QtWidgets.QSpinBox(self.layoutWidget2)
         self.spinBox.setMinimumSize(QtCore.QSize(211, 22))
         self.spinBox.setMinimum(-10)
@@ -87,7 +90,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.pushButton_4)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 620, 231, 41))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 680, 231, 41))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -105,6 +108,18 @@ class Ui_MainWindow(object):
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(10, 370, 224, 224))
         self.label_6.setObjectName("label_6")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(50, 600, 141, 71))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.pushButton_6 = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.verticalLayout_3.addWidget(self.pushButton_6)
+        self.pushButton_7 = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pushButton_7.setObjectName("pushButton_7")
+        self.verticalLayout_3.addWidget(self.pushButton_7)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 26))
@@ -125,7 +140,9 @@ class Ui_MainWindow(object):
         self.listWidget.itemClicked.connect(self.process)
         self.pushButton_4.clicked.connect(self.get_change_num)
         self.pushButton_5.clicked.connect(self.show_zero)
-
+        self.pushButton_6.clicked.connect(self.zoomout)
+        self.pushButton_7.clicked.connect(self.zoomin)
+        self.pushButton_8.clicked.connect(self.show_123)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -142,8 +159,11 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">增减数量</p></body></html>"))
         self.pushButton_4.setText(_translate("MainWindow", "确认"))
         self.pushButton_5.setText(_translate("MainWindow", "显示判断为没有线虫或者边缘区域"))
+        self.pushButton_8.setText(_translate("MainWindow", "显示判断为线虫的区域"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">线虫条数</span></p></body></html>"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">三条以上判断</p></body></html>"))
+        self.pushButton_6.setText(_translate("MainWindow", "放大+"))
+        self.pushButton_7.setText(_translate("MainWindow", "缩小-"))
         self.menu.setTitle(_translate("MainWindow", "关于"))
         self.actionauthor_weber.setText(_translate("MainWindow", "作者：Weber"))
     '''相关函数'''
@@ -254,35 +274,49 @@ class Ui_MainWindow(object):
         self.label_6.setPixmap(QtGui.QPixmap(""))
         img_show = cv2.drawContours(img_show, cnts[1], -1, (255, 0, 0), 5)
         img_show = cv2.resize(img_show, (1024, 960))
-        img_show = cv2.cvtColor(img_show, cv2.COLOR_BGR2RGB)
-        # x = img_show.shape[1]
-        # y = img_show.shape[0]
-        frame = QtGui.QImage(img_show, 1024, 960, QtGui.QImage.Format_RGB888)
+        self.img_show = cv2.cvtColor(img_show, cv2.COLOR_BGR2RGB)
+        self.zoomscale = 1
+        frame = QtGui.QImage(self.img_show, 1024, 960, QtGui.QImage.Format_RGB888)
         pix = QtGui.QPixmap.fromImage(frame)
         self.item = QtWidgets.QGraphicsPixmapItem(pix)
         self.scene = QtWidgets.QGraphicsScene()
         self.scene.addItem(self.item)
         self.graphicsView.setScene(self.scene)
-        # QtWidgets.QMessageBox.information(None, "识别为零条人工判断", "对识别为0条和边缘的区域判断在下方加减确定最终数量", QtWidgets.QMessageBox.Ok)
         img_show_2 = cv2.drawContours(img_show_2, cnts[1], -1, (255, 0, 0), 5)
         img_show_2 = cv2.resize(img_show_2, (1024, 960))
-        self.img_show_3 = cv2.cvtColor(img_show_2, cv2.COLOR_BGR2RGB)
-        # frame = QtGui.QImage(img_show_2, 1024, 960, QtGui.QImage.Format_RGB888)
-        # pix = QtGui.QPixmap.fromImage(frame)
-        # self.item = QtWidgets.QGraphicsPixmapItem(pix)
-        # self.scene = QtWidgets.QGraphicsScene()
-        # self.scene.addItem(self.item)
-        # self.graphicsView.setScene(self.scene)
+        self.img_show_2 = cv2.cvtColor(img_show_2, cv2.COLOR_BGR2RGB)
         self.lcdNumber.display(self.num)
 
     def show_zero(self):
         QtWidgets.QMessageBox.information(None, "零条人工判断", "对识别为0条和边缘的区域判断，确定最终数量\n在按钮右侧加减上边缘及误判", QtWidgets.QMessageBox.Ok)
-        frame = QtGui.QImage(self.img_show_3, 1024, 960, QtGui.QImage.Format_RGB888)
+        self.zoomscale = 1
+        frame = QtGui.QImage(self.img_show_2, 1024, 960, QtGui.QImage.Format_RGB888)
         pix = QtGui.QPixmap.fromImage(frame)
         self.item = QtWidgets.QGraphicsPixmapItem(pix)
         self.scene = QtWidgets.QGraphicsScene()
         self.scene.addItem(self.item)
         self.graphicsView.setScene(self.scene)
+
+    def show_123(self):
+        self.zoomscale = 1
+        frame = QtGui.QImage(self.img_show, 1024, 960, QtGui.QImage.Format_RGB888)
+        pix = QtGui.QPixmap.fromImage(frame)
+        self.item = QtWidgets.QGraphicsPixmapItem(pix)
+        self.scene = QtWidgets.QGraphicsScene()
+        self.scene.addItem(self.item)
+        self.graphicsView.setScene(self.scene)
+
+    def zoomout(self):
+        self.zoomscale += 0.05
+        if self.zoomscale >= 2:
+            self.zoomscale = 2
+        self.item.setScale(self.zoomscale)
+
+    def zoomin(self):
+        self.zoomscale -= 0.05
+        if self.zoomscale <= 0.2:
+            self.zoomscale = 0.2
+        self.item.setScale(self.zoomscale)
 
     def get_change_num(self):
         self.num += self.spinBox.value()
